@@ -1,14 +1,29 @@
 import "./App.css"
+import { Navbar } from "./components/Navbar/Navbar"
+import { Footer } from "./components/Footer/Footer"
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Home, Candidates, Login, Register, Standings, Vote, Profile } from "./screens/index"
 
 export const App = () => {
+
+  const isLoggedIn = true;
+
   return (
-    <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
-    <div className="text-center">
-      <h1 className="text-base font-semibold text-red-600">404</h1>
-      <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">Page not found</h1>
-      <p className="mt-6 text-base leading-7 text-gray-600">Sorry, we couldn’t find the page you’re looking for.</p>
-      <button class="btn">Button</button>
-    </div>
-  </main>
+    <>
+      <Navbar />
+      {/* routing */}
+      <Routes>
+        <Route path="/candidates" element={<Candidates />} />
+        <Route index element={<Home />} />
+        <Route path="/about" element={<Home />} />
+        <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} />
+        <Route path="/vote" element={isLoggedIn ? <Vote /> : <Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/standings" element={<Standings />} />
+      </Routes>
+      {/* End routing */}
+      <Footer />
+    </>
   )
 }
