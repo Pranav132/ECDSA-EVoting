@@ -18,8 +18,8 @@ export const App = () => {
         <Route path="/about" element={<Home />} />
         <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} />
         <Route path="/vote" element={isLoggedIn ? <Vote /> : <Navigate to="/login" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={!isLoggedIn ? <Login /> : <Navigate to="/" />} />
+        <Route path="/register" element={!isLoggedIn ? <Register /> : <Navigate to="/" />} />
         <Route path="/standings" element={<Standings />} />
       </Routes>
       {/* End routing */}

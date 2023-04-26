@@ -1,12 +1,9 @@
 - React Client
 
-1. Landing Page
-2. Registration Page
-3. Login Page
-4. Welcome after Login
-5. Candidates Page
-6. Voting Page
-7. Profile Page
+1. Fill Data
+2. Change Forms
+3. Link to backend
+4. LocalStorage Auth Context to check if user logged in
 
 - Flask Backend
 

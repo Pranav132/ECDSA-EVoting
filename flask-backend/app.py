@@ -1,6 +1,7 @@
 from base import db, app, api
 from flask_restful import Resource
 from models import student
+from errors import APIValidationError
 
 class StudentApi(Resource):
     def get(self, student_id):
