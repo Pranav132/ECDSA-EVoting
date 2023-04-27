@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export const Navbar = () => {
 
-    const loggedIn = true;
+    const loggedIn = false;
 
     return(
         <div className="navbar bg-base-100 border-b-2">

@@ -6,7 +6,7 @@ import { Home, Candidates, Login, Register, Standings, Vote, Profile } from "./s
 
 export const App = () => {
 
-  const isLoggedIn = true;
+  const isLoggedIn = false;
 
   return (
     <>
