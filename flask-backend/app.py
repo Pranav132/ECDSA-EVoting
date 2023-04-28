@@ -5,6 +5,8 @@ from errors import APIValidationError
 from parsers import userParser, candidateParser, voteParser, loginParser
 import json
 from fastecdsa import keys, curve, ecdsa
+from sqlalchemy import text
+
 class UserAPI(Resource):
      """
     API Endpoint for User data
@@ -99,6 +101,7 @@ class UserAPI(Resource):
         db.session.commit()
         
         return "User added", 200
+     
      
 class VoteAPI(Resource):
      """
@@ -196,9 +199,21 @@ class VoteAPI(Resource):
         
         return "Vote added", 200
 
+
+class TestAPI(Resource):
+    def get(self):
+        try:
+            test = db.session.execute(text('SELECT * FROM Candidates;'))
+            rows = test.fetchall()
+            print('JSON data:', rows)
+            return "Connected to database"
+        except Exception as e:
+            return str(e)
+
 # adding api resources
 api.add_resource(UserAPI, '/api/user','/api/login/<string:user_id>')
 api.add_resource(VoteAPI, '/api/votes', '/api/vote')
+api.add_resource(TestAPI, '/api/test', '/api/test')
 
 if __name__ == '__main__':
     db.create_all()
