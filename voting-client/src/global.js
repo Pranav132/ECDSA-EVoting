@@ -7,9 +7,9 @@ export function generateRandomHexString(length) {
 }
 
 export const backendURL = "http://localhost:8080"
+export const ec = new EC('p256');
 
 export const getKeyPair = () => {
-    const ec = new EC('p256');
     const keyPair = ec.genKeyPair();
     const privateKey = keyPair.getPrivate('hex')
     const publicKey = keyPair.getPublic('hex')

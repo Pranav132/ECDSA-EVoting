@@ -16,6 +16,9 @@ class User(db.Model):
     user_public_key = db.Column(db.String(255), nullable=False, unique=True)
     user_has_voted = db.Column(db.Boolean, default=False, nullable=False)
 
+    def __repr__(self):
+        return f"<User user_id={self.user_id} user_username='{self.user_username}' user_public_key='{self.user_public_key}' user_username='{self.user_username}' user_has_voted='{self.user_has_voted}'>"
+
 
 # Candidate Model
 class Candidate(db.Model):
