@@ -10,31 +10,31 @@ export const CandidateCards = () => {
     const data = [
         {
             image:
-                "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085",
-            title: "5 Easy Tips That Will Make Your Latte Art Flourish",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/800px-JavaScript-logo.png",
+            title: "Javascript",
             description:
-                "Latte art is quite often the most attractive thing for a new barista, and latte art is an excellent gateway to the exciting world of coffee. Latte art easy to start with, but to master latte art patterns, you need a lot practice and determination. Here are my tips that helped me to improve my latte art a few years ago!",
+                "A dynamic, interpreted programming language that is commonly used in web development. Its strengths include flexibility, easy integration with other languages, and a large and active community. It is often used to create interactive user interfaces, as well as server-side applications and web services.",
         },
         {
             image:
-                "https://images.unsplash.com/photo-1512034400317-de97d7d6c3ed",
-            title: "Coffee Roasting Basics: Developing Flavour by Roasting",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/2048px-Python.svg.png",
+            title: "Python",
             description:
-                "Caffé latte and flat white are definitely the most ordered espresso based drinks in cafés around the world but what are they really? Have you ever wondered the difference between caffé latte vs. flat white? Let's see what makes caffé latte and flat white different from each other!",
+                "A high-level, interpreted programming language that emphasizes readability and ease of use. Its strengths include a simple and intuitive syntax, a large and comprehensive standard library, and broad support for scientific computing and data analysis. It is often used for scripting, automation, web development, machine learning, and scientific research.",
         },
         {
             image:
-                "https://images.unsplash.com/photo-1445077100181-a33e9ac94db0",
-            title: "Latte vs. Flat White - What is the Difference?",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/C_Programming_Language.svg/1200px-C_Programming_Language.svg.png",
+            title: "C",
             description:
-                "I bet roasting is the thing that every barista wants to know about! We can develop flavour by roasting coffee. How can we achieve the best tasting coffee? What actually happens when roasting?",
+                "A low-level, compiled programming language that is widely used for system programming and operating systems. Its strengths include speed, efficiency, and direct access to hardware resources. It is often used for developing operating systems, device drivers, embedded systems, and other performance-critical applications.",
         },
         {
             image:
-                "https://images.unsplash.com/photo-1459257868276-5e65389e2722",
-            title: "Creating the Perfect Espresso Recipe",
+                "https://i.pinimg.com/originals/f1/ea/a7/f1eaa7278f64e27128e062a3de918265.png",
+            title: "Java",
             description:
-                "Espresso recipes are important in cafés in terms of consistency and flavour. How and why are the espresso recipes made and what are the things you should consider when making a recipe for espresso? Let’s dig deeper into the world of espresso!",
+                "A class-based, object-oriented programming language that is designed to be platform-independent and portable. Its strengths include robustness, security, and scalability, as well as a large and mature ecosystem of libraries, frameworks, and tools. It is often used for developing enterprise applications, web services, mobile apps, and games.",
         },
     ];
 

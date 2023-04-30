@@ -1,19 +1,22 @@
 import { Card } from "./Card"
+import { useAuth } from "../../Globals/authContext";
 
 export const ProfileCards = () => {
+
+  const userData = useAuth().userData;
 
     const data = [
       {
         title:"Name",
-        value:"Pranav Iyengar"
+        value: userData.name
       },
       {
-        title:"Voted",
-        value:"False"
+        title:"Username",
+        value:userData.username
       },
       {
-        title:"Details",
-        value:"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        title:"Voting Status",
+        value:userData.has_voted === 'false' ? 'Not Voted' : 'Voted'
       }
     ];
 

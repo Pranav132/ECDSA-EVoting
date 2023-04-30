@@ -85,7 +85,12 @@ class VoteAPI(Resource):
         
         # If User found
         if allVotes:
-            vote_counts = {}
+            vote_counts = {
+                1: 0,
+                2: 0,
+                3: 0,
+                4: 0,
+            }
             for vote in allVotes:
                 candidate_id = vote.candidate_id
                 if candidate_id in vote_counts:

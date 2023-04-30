@@ -16,10 +16,10 @@ export const VoteHero = () => {
     const authContext=useAuth();
 
     const candidateOptions = [
-        {name: "Option 1", value: 1},
-        {name: "Option 2", value: 2},
-        {name: "Option 3", value: 3},
-        {name: "Option 4", value: 4}
+        {name: "Javascript", value: 1},
+        {name: "Python", value: 2},
+        {name: "C", value: 3},
+        {name: "Java", value: 4}
     ]
 
     const handleInputChange = event => {
@@ -71,12 +71,12 @@ export const VoteHero = () => {
         }
     }
 
-    const hasVoted = authContext.hasVoted;
-
-    if(!hasVoted){
+    const hasVoted = authContext.userData.has_voted;
+    if(hasVoted !== 'false'){
         return(
-            <div className="hero min-h-[85vh] bg-base-200">
-                <h1>Hello</h1>
+            <div className="hero min-h-[85vh] bg-base-200 flex justify-center align-center flex-col">
+                <h1 className="font-bold text-2xl py-4">You have already voted.</h1>
+                <Link to="/standings"><button className="btn btn-primary">View Standings</button></Link>
             </div>
         )
     }

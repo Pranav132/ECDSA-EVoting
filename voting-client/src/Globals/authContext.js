@@ -52,19 +52,11 @@ export const AuthProvider = ({ children }) => {
     return check;
   };
 
-  const hasVoted = () => {
-    const check = currentUserHasVoted !== "false"
-    setLoading(false);
-    return check;
-  }
-
-  const userData = () => {
-    return {
+  const userData = {
         username: currentUserUsername,
         name: currentUserName,
         has_voted: currentUserHasVoted
     }
-  }
 
   const value = {
     userData,
@@ -72,7 +64,6 @@ export const AuthProvider = ({ children }) => {
     logout,
     isLoggedIn,
     loading,
-    hasVoted, 
     setVoted
   };
 
