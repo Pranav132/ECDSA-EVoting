@@ -11,7 +11,6 @@ registerParser.add_argument('user_public_key')
 voteParser = reqparse.RequestParser()
 voteParser.add_argument('candidate_id')
 voteParser.add_argument('message')
-voteParser.add_argument('user_username')
 voteParser.add_argument('user_signature')
 
 #Parser for Login
