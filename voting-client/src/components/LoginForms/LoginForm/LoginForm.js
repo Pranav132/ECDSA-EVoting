@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
-import { backendURL, ec, generateRandomHexString } from "../../../global";
+import { signMessage } from "../../../Globals/functions";
+import { backendURL, ec } from "../../../Globals/constants";
+import { useAuth } from "../../../Globals/authContext";
 
 
 export const LoginForm = () => {
@@ -12,7 +14,8 @@ export const LoginForm = () => {
     });
     const [loading, setLoading] = useState(false);
     const [show, setShow] =  useState(false);
-    const message = generateRandomHexString(256);
+    const authContext = useAuth();
+
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -20,16 +23,21 @@ export const LoginForm = () => {
     };
 
     const handleLogin = async (event) => {
+
         event.preventDefault();
-        const jKey = ec.keyFromPrivate(formData.secretKey);
-        const signature = jKey.sign(message).toDER('hex');
-        let requestData = { username: formData.username, signature: signature, message: message}
+
+        // converting private key and signing message
+        const privKey = ec.keyFromPrivate(formData.secretKey, "hex");
+        const returnData = signMessage(privKey)
+
         try{
+
+            // verifying login with backend using Schnorr Protocol
             setLoading(true)
             await axios.post(`${backendURL}/api/login`, {
-                user_username: requestData.username,
-                user_signature: requestData.signature,
-                message: requestData.message,
+                user_username: formData.username,
+                user_signature: returnData.signature,
+                message: returnData.message,
               }, {
                 headers: {
                   'Content-Type': 'application/json',
@@ -37,18 +45,23 @@ export const LoginForm = () => {
               })
             .then(
                 responseData =>{
+                    // Checking the response
                     setLoading(false);
-                    console.log(responseData)
-                    if(responseData.data === "User added"){
-                        setShow(false);
+                    if(responseData.data.status_code === 200){
+                        // If login successful
+                        const user = responseData.data.user;
+                        authContext.login(user.user_username, user.user_name, user.user_has_voted)
                     }
                     else{
+                        // Invalid Login
                         setShow(true);
                     }
                 }
             );
         }
-        catch(err) {       
+        catch(err) {      
+            // Error Logging in
+            setLoading(false); 
             setShow(true);
         }
     }

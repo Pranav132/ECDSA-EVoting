@@ -1,4 +1,9 @@
+import { useAuth } from "../../../Globals/authContext"
+
 export const ProfileHero = () => {
+
+    const authContext = useAuth()
+
     return (
         <section class="bg-gray-50">
             <div
@@ -18,12 +23,12 @@ export const ProfileHero = () => {
                     </p>
 
                     <div class="mt-8 flex flex-wrap justify-center gap-4">
-                        <a
+                        <button
                         class="block w-full rounded bg-red-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-red-700 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
-                        href="/get-started"
+                        onClick={() => authContext.logout()}
                         >
                         Get Started
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>

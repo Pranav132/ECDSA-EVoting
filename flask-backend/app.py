@@ -6,7 +6,7 @@ from parsers import userParser, candidateParser, voteParser, loginParser
 import json
 from fastecdsa import keys, curve, ecdsa
 from sqlalchemy import text
-from functions import hex_to_point
+from functions import verify_signature
 
 class RegisterUser(Resource):
      """
@@ -188,26 +188,16 @@ class LoginUser(Resource):
         
         # If User found
         if queriedUser:
-
-            # Verify User using signature
-            try:
-                curve_point = hex_to_point(queriedUser.user_public_key, curve.P256)
-                # signature_tuple = signature_to_int_tuple(user_signature)
-                # print(signature_tuple)
-                print(message)
-            except Exception as e:
-                return APIValidationError(status_code=500, error_code="Internal Server Error", error_message=str(e))
-            
-            user_verified = ecdsa.verify(signature_tuple, message.encode('utf-8'), curve_point, curve.P256, hashfunc=None)
-
+            user_verified = verify_signature(queriedUser.user_public_key, message, user_signature)
             if user_verified:
                 data = {
                     "user_id": queriedUser.user_id,
                     "user_name": queriedUser.user_name,
                     "user_public_key": queriedUser.user_public_key,
-                    "user_has_voted": queriedUser.user_has_voted
+                    "user_has_voted": queriedUser.user_has_voted,
+                    "user_username": queriedUser.user_username
                 }
-                message = {"data": data, "status_code": 200}
+                message = {"user": data, "status_code": 200}
                 return message, 200
             else:
                 return APIValidationError(status_code=401, error_code="Unauthorized", error_message="Unable to verify through signature")

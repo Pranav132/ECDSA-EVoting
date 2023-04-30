@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
-import { getKeyPair } from "../../../global"
 import { useState } from "react"
 import axios from "axios";
-import { backendURL } from "../../../global";
+import { backendURL } from "../../../Globals/constants";
+import { getKeyPair } from "../../../Globals/functions";
 
 export const RegisterForm = () => {
 
@@ -25,13 +25,12 @@ export const RegisterForm = () => {
     const handleRegistration = async (event) => {
         event.preventDefault();
         const keys = getKeyPair();
-        let requestData = { ...formData, publicKey: keys.publicKey}
         try{
             setLoading(true)
             await axios.post(`${backendURL}/api/user`, {
-                user_name: requestData.name,
-                user_username: requestData.username,
-                user_public_key: requestData.publicKey
+                user_name: formData.name,
+                user_username: formData.username,
+                user_public_key: keys.publicKey
             })
             .then(
                 responseData =>{
@@ -89,6 +88,7 @@ export const RegisterForm = () => {
                         </form>
                     </div>
                 ) : (
+                    // TODO: Style
                     <div>
                         <h1>Secret Key : {secretKey}</h1>
                         <h1>Public Key : {publicKey}</h1>
