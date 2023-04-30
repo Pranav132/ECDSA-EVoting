@@ -19,6 +19,5 @@ export function signMessage(privateKey) {
     var msgHash = ec.hash().update(message).digest();
     var signature = keyPair.sign(msgHash);
     signature = signature.toDER("hex");
-    // Return the original message instead of the hash
     return { signature, message };
-  }
+}

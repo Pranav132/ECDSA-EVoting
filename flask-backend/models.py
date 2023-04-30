@@ -42,5 +42,4 @@ class Vote(db.Model):
     """
     __tablename__ = 'Votes'
     vote_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    candidate_id = db.Column(db.Integer, db.ForeignKey('candidates.candidate_id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    candidate_id = db.Column(db.Integer, db.ForeignKey('Candidates.candidate_id'))

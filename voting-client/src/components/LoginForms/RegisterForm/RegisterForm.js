@@ -4,6 +4,8 @@ import axios from "axios";
 import { backendURL } from "../../../Globals/constants";
 import { getKeyPair } from "../../../Globals/functions";
 
+// TODO: Style
+
 export const RegisterForm = () => {
 
     const [formData, setFormData] = useState({
@@ -88,7 +90,6 @@ export const RegisterForm = () => {
                         </form>
                     </div>
                 ) : (
-                    // TODO: Style
                     <div>
                         <h1>Secret Key : {secretKey}</h1>
                         <h1>Public Key : {publicKey}</h1>

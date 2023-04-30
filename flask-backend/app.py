@@ -1,12 +1,11 @@
 from base import db, app, api
 from flask_restful import Resource
-from models import User, Candidate, Vote
+from models import User, Vote
 from errors import APIValidationError
-from parsers import userParser, candidateParser, voteParser, loginParser
+from parsers import registerParser, voteParser, loginParser
 import json
-from fastecdsa import keys, curve, ecdsa
 from sqlalchemy import text
-from functions import verify_signature
+from functions import verify_signature, getUsers
 
 class RegisterUser(Resource):
      """
@@ -26,7 +25,7 @@ class RegisterUser(Resource):
         Returns 500 if Internal Server Error\n
         """
 
-        args = userParser.parse_args()
+        args = registerParser.parse_args()
         user_name = args.get("user_name", None)
         user_username = args.get("user_username", None)
         user_public_key = args.get("user_public_key", None)
@@ -110,11 +109,10 @@ class VoteAPI(Resource):
         Returns 500 if Internal Server Error\n
         """
 
-        args = userParser.parse_args()
+        args = voteParser.parse_args()
         candidate_id = args.get("candidate_id", None)
         user_signature = args.get("user_signature", None)
-        message=args.get("message", None)
-        user_id = args.get("user_id", None)
+        message = args.get("message", None)
 
         if candidate_id is None:
             return APIValidationError(status_code=400, error_code = "Client Error", error_message = "Candidate to vote for must be provided.")
@@ -122,41 +120,36 @@ class VoteAPI(Resource):
         if user_signature is None:
             return APIValidationError(status_code=400, error_code = "Client Error", error_message = "User signature must be provided.")
         
-        if user_id is None:
-            return APIValidationError(status_code=400, error_code = "Client Error", error_message = "User ID must be provided.")
-        
         if message is None:
             return APIValidationError(status_code=400, error_code = "Client Error", error_message = "Message must be provided.")
-
-        userCheck = db.session.query(User).filter(User.user_id == user_id).first()
-
-        if not userCheck:
-            return APIValidationError(status_code=404, error_code="Resource Not Found", error_message="User not found.")
-
-        try:
-            # logic for voting
-            # verify that user has not already voted - Resource Conflict
-            user_has_voted = userCheck.user_has_voted
-            if not user_has_voted:
-                return APIValidationError(status_code=409, error_code="Resource Conflict", error_message="User Has already Voted")
-            # verify signature - Unauthorized 401
-            x, y = userCheck.user_public_key
-            pub_key = keys.ECPoint(curve.P256, x, y)
-            user_verified = ecdsa.verify(user_signature, message.encode('utf-8'), pub_key, curve.P256, hashfunc=None)
-            if not user_verified:
-                return APIValidationError(status_code=401, error_code="Unauthorized", error_message="Could not verify user through signature")
-            # verify that candidate id is 1,2,3 or 4 - Resource Conflict
-            if candidate_id not in [1,2,3,4]:
-                return APIValidationError(status_code=409, error_code="Resource Code", error_message="Candidate not Found")
-            # if all verified, then register vote
-            newVote = Vote(candidate_id = candidate_id, user_id = user_id)
-        except Exception as e:
-            return APIValidationError(status_code=500, error_code="Internal Server Error", error_message=str(e))
-
-        db.session.add(newVote)
-        db.session.commit()
         
-        return "Vote added", 200
+
+        users = getUsers()
+        userFound = False
+        foundUser = None
+        for user in users:
+            if verify_signature(user['key'], message, user_signature):
+                userFound = True
+                foundUser = user
+
+        # If User found
+        if userFound:
+
+            queriedUser = db.session.query(User).filter(User.user_username == foundUser["username"]).first()
+            
+            if queriedUser.user_has_voted:
+                return APIValidationError(status_code=409, error_code="Resource Conflict", error_message="User has already voted")
+            
+            newVote = Vote(candidate_id = candidate_id)
+            queriedUser.user_has_voted = True
+            db.session.add(newVote)
+            db.session.commit()
+            message = {"response": "Vote added", "status_code": 200}
+            return message, 200
+        
+        else:
+            return APIValidationError(status_code=401, error_code="Unauthorized", error_message="Unable to verify through signature")
+    
 
 class LoginUser(Resource):
 
@@ -180,6 +173,16 @@ class LoginUser(Resource):
         user_signature = args.get('user_signature')
         message = args.get('message')
         user_username = args.get('user_username')
+
+        # Validating
+        if user_signature is None:
+            return APIValidationError(status_code=400, error_code = "Client Error", error_message = "User signature must be provided.")
+        
+        if user_username is None:
+            return APIValidationError(status_code=400, error_code = "Client Error", error_message = "User Username must be provided.")
+        
+        if message is None:
+            return APIValidationError(status_code=400, error_code = "Client Error", error_message = "Message must be provided.")
 
         try:
             queriedUser = db.session.query(User).filter(User.user_username == user_username).first()

@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [currentUserUsername, setCurrentUserUsername] = useState(null);
   const [currentUserName, setCurrentUserName] = useState(null)
   const [currentUserHasVoted, setCurrentUserHasVoted] = useState(null)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedUserUsername = localStorage.getItem("userUsername");
@@ -40,9 +41,22 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("userHasVoted");
   };
 
+  const setVoted = () => {
+    setCurrentUserHasVoted(true);
+    localStorage.setItem("userHasVoted", true)
+  }
+
   const isLoggedIn = () => {
-    return currentUserUsername !== null;
+    const check = currentUserUsername !== null
+    setLoading(false);
+    return check;
   };
+
+  const hasVoted = () => {
+    const check = currentUserHasVoted !== "false"
+    setLoading(false);
+    return check;
+  }
 
   const userData = () => {
     return {
@@ -57,6 +71,9 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     isLoggedIn,
+    loading,
+    hasVoted, 
+    setVoted
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

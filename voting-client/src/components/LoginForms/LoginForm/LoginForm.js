@@ -9,8 +9,8 @@ import { useAuth } from "../../../Globals/authContext";
 export const LoginForm = () => {
 
     const [formData, setFormData] = useState({
-        username: '',
-        secretKey: '',
+        username: null,
+        secretKey: null,
     });
     const [loading, setLoading] = useState(false);
     const [show, setShow] =  useState(false);

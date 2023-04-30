@@ -9,6 +9,14 @@ export const App = () => {
 
   const isLoggedIn = useAuth().isLoggedIn();
 
+  if (useAuth().loading) {
+    return (
+      <div className="app-loading">
+        <progress className="progress w-56"></progress> 
+      </div>
+    );
+  }
+
   return (
     <>
       <Navbar />

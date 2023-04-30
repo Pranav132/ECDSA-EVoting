@@ -1,6 +1,7 @@
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import hashes
 from cryptography.exceptions import InvalidSignature
+from models import User
 
 def verify_signature(public_key_hex, message, signature_hex):
     public_key_bytes = bytes.fromhex(public_key_hex)
@@ -16,3 +17,8 @@ def verify_signature(public_key_hex, message, signature_hex):
         return True
     except InvalidSignature:
         return False
+
+def getUsers():
+    users = User.query.all()
+    public_keys = [{"key": user.user_public_key, "hasVoted": user.user_has_voted, "username": user.user_username} for user in users]
+    return public_keys
