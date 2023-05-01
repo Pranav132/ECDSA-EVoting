@@ -39,7 +39,7 @@ export const Standings = () => {
             ) : (
                 <> 
                 <StandingsHero />
-                <div className="flex justify-center align-center py-20">
+                <div className="flex justify-center align-center py-12">
                     <StandingsTable votes={votes} />
                 </div>
                 <PieChart votes={votes}/>

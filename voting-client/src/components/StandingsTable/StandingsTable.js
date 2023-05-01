@@ -1,7 +1,5 @@
 export const StandingsTable = (props) => {
 
-    // TODO: Change labels to Candidate Names
-
     const votes = {}
 
     for(var i = 1; i<5; i++){
@@ -11,45 +9,33 @@ export const StandingsTable = (props) => {
     const sortedArray = Object.entries(votes)
     .sort((a, b) => b[1] - a[1])
     .map(([key, value]) => [key, value]);
+    const languages = ["Javascript", "Python", "C", "Java"]
 
-    const sortedObj = Object.fromEntries(sortedArray);
-    console.log(sortedObj)
+    for(i = 0; i < sortedArray.length; i++){
+        sortedArray[i][0] = languages[Number(sortedArray[i][0]) - 1];
+    }
+
+    console.log(sortedArray)
 
     return(
         <div className="overflow-x-auto">
             <table className="table w-full border-2">
                 {/* head */}
                 <thead>
-                <tr>
-                    <th></th>
-                    <th>Language</th>
-                    <th>Votes</th>
-                </tr>
+                    <tr>
+                        <th></th>
+                        <th>Language</th>
+                        <th>Votes</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {/* row 1 */}
-                <tr>
-                    <th>1</th>
-                    <td>Cy Ganderton</td>
-                    <td>Quality Control Specialist</td>
-                </tr>
-                {/* row 2 */}
-                <tr>
-                    <th>2</th>
-                    <td>Hart Hagerty</td>
-                    <td>Desktop Support Technician</td>
-                </tr>
-                {/* row 3 */}
-                <tr>
-                    <th>3</th>
-                    <td>Brice Swyre</td>
-                    <td>Tax Accountant</td>
-                </tr>
-                <tr>
-                    <th>4</th>
-                    <td>lOl JoKes</td>
-                    <td>qwewq</td>
-                </tr>
+                    { sortedArray.map((subArray, index) => (
+                        <tr>
+                            <th>{index+1}</th>
+                            <td>{subArray[0]}</td>
+                            <td>{subArray[1]}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>
