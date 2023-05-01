@@ -15,7 +15,7 @@ export const LoginForm = () => {
     const [loading, setLoading] = useState(false);
     const [show, setShow] =  useState(false);
     const authContext = useAuth();
-
+    const [message, setMessage] = useState("");
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -54,6 +54,7 @@ export const LoginForm = () => {
                     }
                     else{
                         // Invalid Login
+                        setMessage(responseData.data.error_message)
                         setShow(true);
                     }
                 }
@@ -72,7 +73,7 @@ export const LoginForm = () => {
                     {show && 
                         <div className="alert alert-error">
                             <div>
-                                <span>Login Failed. Please try again.</span>
+                                <span>{message}</span>
                             </div>
                         </div>
                     }

@@ -8,7 +8,7 @@ import axios from "axios";
 export const Standings = () => {
 
     const [ loading, setLoading ] = useState(false);
-    const [ votes, setVotes ] = useState([0,0,0,0]);
+    const [ votes, setVotes ] = useState([1,1,1,1]);
 
     const getVotes = async () => {
         try{

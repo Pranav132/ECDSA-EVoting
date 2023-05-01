@@ -210,7 +210,7 @@ class LoginUser(Resource):
             else:
                 return APIValidationError(status_code=401, error_code="Unauthorized", error_message="Unable to verify through signature")
         else:
-            return APIValidationError(status_code=404, error_code="Resource not Found", error_message="User with given public key does not exist")
+            return APIValidationError(status_code=404, error_code="Resource not Found", error_message="User with given username does not exist")
 
 
 class TestAPI(Resource):

@@ -3,14 +3,13 @@ import { useState } from "react"
 import axios from "axios";
 import { backendURL } from "../../../Globals/constants";
 import { getKeyPair } from "../../../Globals/functions";
-
-// TODO: Style
+import { Card } from "../../ProfileCards/Card";
 
 export const RegisterForm = () => {
 
     const [formData, setFormData] = useState({
-        name: '',
-        username: '',
+        name: null,
+        username: null,
     });
 
     const [loading, setLoading] = useState(false);
@@ -18,6 +17,7 @@ export const RegisterForm = () => {
     const [publicKey, setPublicKey] = useState("");
     const [secretKey, setSecretKey] = useState("")
     const [show, setShow] =  useState(false);
+    const [message, setMessage] = useState("");
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -44,6 +44,7 @@ export const RegisterForm = () => {
                         setShow(false);
                     }
                     else{
+                        setMessage(responseData.data.error_message)
                         setShow(true);
                     }
                 }
@@ -60,15 +61,15 @@ export const RegisterForm = () => {
                     {show && 
                         <div className="alert alert-error">
                             <div>
-                                <span>User could not be registered. Please try again.</span>
+                                <span>{message}</span>
                             </div>
                         </div>
                     }
             </div>
             {!loading ? (
-            <div>
+            <div className="w-full flex justify-center">
                 {!registered ? (
-                    <div className="w-full p-6 bg-white border-t-4 border-gray-600 rounded-md shadow-md border-top lg:max-w-lg">
+                    <div className="w-full min-w-2xl p-6 bg-white border-t-4 border-gray-600 rounded-md shadow-md border-top lg:max-w-lg">
                         <h1 className="text-3xl font-semibold text-center text-gray-700">Register</h1>
                         <form className="space-y-4">
                             <div>
@@ -91,11 +92,13 @@ export const RegisterForm = () => {
                     </div>
                 ) : (
                     <div>
-                        <h1>Secret Key : {secretKey}</h1>
-                        <h1>Public Key : {publicKey}</h1>
-                        <p>Please store your secret key safely for future use. It will not be stored by us.</p>
-                        <p>You can process to login.</p>
-                        <Link to ="/login"><button class = "btn btn-primary">Login</button></Link>
+                        <div
+                        className="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2">
+                             <Card title="Secret Key" value={secretKey} key={0}/>
+                             <Card title="Public Key" value={publicKey} key={1}/>
+                        </div>
+                        <p className="py-12 text-xl font-semibold max-w-lg text-center">Please store your secret key safely for future use. It will not be stored by us.</p>
+                        <Link to ="/login"><button class = "m-auto w-full btn btn-primary">Login</button></Link>
                     </div>
                 )}
             </div>

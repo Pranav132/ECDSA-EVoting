@@ -9,24 +9,20 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [currentUserUsername, setCurrentUserUsername] = useState(null);
   const [currentUserName, setCurrentUserName] = useState(null)
-  const [currentUserHasVoted, setCurrentUserHasVoted] = useState(null)
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedUserUsername = localStorage.getItem("userUsername");
     const storedUserName = localStorage.getItem("userName");
-    const storedUserHasVoted = localStorage.getItem("userHasVoted");
     if (storedUserUsername) {
       setCurrentUserUsername(storedUserUsername);
       setCurrentUserName(storedUserName);
-      setCurrentUserHasVoted(storedUserHasVoted)
     }
   }, []);
 
   const login = (userUsername, userName, userHasVoted) => {
     setCurrentUserUsername(userUsername);
     setCurrentUserName(userName);
-    setCurrentUserHasVoted(userHasVoted)
     localStorage.setItem("userUsername", userUsername);
     localStorage.setItem("userName", userName);
     localStorage.setItem("userHasVoted", userHasVoted);
@@ -35,14 +31,12 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setCurrentUserUsername(null);
     setCurrentUserName(null);
-    setCurrentUserHasVoted(null);
     localStorage.removeItem("userUsername");
     localStorage.removeItem("userName");
     localStorage.removeItem("userHasVoted");
   };
 
   const setVoted = () => {
-    setCurrentUserHasVoted(true);
     localStorage.setItem("userHasVoted", true)
   }
 
@@ -55,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   const userData = {
         username: currentUserUsername,
         name: currentUserName,
-        has_voted: currentUserHasVoted
+        has_voted: localStorage.getItem("userHasVoted")
     }
 
   const value = {

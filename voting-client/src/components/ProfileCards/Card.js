@@ -4,7 +4,7 @@ export const Card = (props) => {
   
             <div className="stat">
                 <div className="stat-title">{props.title}</div>
-                <div className="font-bold text-2xl">{props.value}</div>
+                <div className="font-bold text-2xl max-w-xl break-all">{props.value}</div>
             </div>
         
         </div>

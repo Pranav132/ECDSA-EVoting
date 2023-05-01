@@ -1,10 +1,10 @@
 export const StandingsHero = () => {
     return(
-        <div className="hero min-h-[50vh] bg-gray-100">
+        <div className="hero min-h-[20vh] py-20 bg-gray-100">
             <div className="hero-content text-center">
                 <div className="max-w-md">
-                <h1 className="text-5xl font-bold">Hello there</h1>
-                <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
+                <h1 className="text-5xl font-bold">Standings</h1>
+                <p className="py-6">Which language has the most votes right now? Find out!</p>
                 </div>
             </div>
         </div>

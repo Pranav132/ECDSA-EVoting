@@ -56,6 +56,7 @@ export const VoteHero = () => {
                     if(responseData.data.status_code === 200){
                         setShow(false);
                         authContext.setVoted();
+                        window.location.reload();
                     }
                     else{
                         // Invalid Vote
@@ -72,6 +73,7 @@ export const VoteHero = () => {
     }
 
     const hasVoted = authContext.userData.has_voted;
+    console.log(hasVoted);
     if(hasVoted !== 'false'){
         return(
             <div className="hero min-h-[85vh] bg-base-200 flex justify-center align-center flex-col">
