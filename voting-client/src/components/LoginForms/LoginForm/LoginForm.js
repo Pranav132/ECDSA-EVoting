@@ -32,7 +32,7 @@ export const LoginForm = () => {
 
         try{
 
-            // verifying login with backend using Schnorr Protocol
+            // verifying login with backend using ECDSA
             setLoading(true)
             await axios.post(`${backendURL}/api/login`, {
                 user_username: formData.username,

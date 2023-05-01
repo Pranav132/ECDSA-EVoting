@@ -1,1 +1,1 @@
-# Schnorr_E-Voting
+# ECDSA-EVoting

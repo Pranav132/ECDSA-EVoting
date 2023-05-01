@@ -6,7 +6,7 @@ class User(db.Model):
     User Model\n
     ID - Primary Key Unique ID of the user\n
     User Name - Name of the user\n
-    User Public Key - Public Key of the user for Schnorr Protocol\n
+    User Public Key - Public Key of the user for ECDSA Protocol\n
     User has voted - Has the user voted\n
     """
     __tablename__ = 'Users'
