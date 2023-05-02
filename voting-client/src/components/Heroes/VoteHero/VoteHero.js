@@ -37,7 +37,7 @@ export const VoteHero = () => {
 
         try{
 
-            // verifying vote with backend using Schnorr Protocol
+            // verifying vote with backend using ECDSA
             setLoading(true)
             await axios.post(`${backendURL}/api/vote`, {
                 candidate_id: formData.candidate,
