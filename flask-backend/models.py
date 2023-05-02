@@ -13,11 +13,9 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_username = db.Column(db.String(255), nullable=False, unique=True)
     user_name =  db.Column(db.String(255), nullable=False)
-    user_public_key = db.Column(db.String(255), nullable=False, unique=True)
-    user_has_voted = db.Column(db.Boolean, default=False, nullable=False)
 
     def __repr__(self):
-        return f"<User user_id={self.user_id} user_username='{self.user_username}' user_public_key='{self.user_public_key}' user_username='{self.user_username}' user_has_voted='{self.user_has_voted}'>"
+        return f"<User user_id={self.user_id} user_username='{self.user_username}' user_name='{self.user_name}'>"
 
 
 # Candidate Model
@@ -43,3 +41,14 @@ class Vote(db.Model):
     __tablename__ = 'Votes'
     vote_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     candidate_id = db.Column(db.Integer, db.ForeignKey('Candidates.candidate_id'))
+    user_public_key = db.Column(db.String(255), nullable=False, unique=True)
+    signature = db.Column(db.String(255), nullable=False)
+
+
+class PublicKey(db.Model):
+    """
+    Public key model for public key registry
+    """
+    __tablename__ = 'PublicKeys'
+    public_key_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    public_key = db.Column(db.String(255), nullable=False, unique=True)

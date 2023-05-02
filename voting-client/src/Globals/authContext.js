@@ -20,12 +20,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (userUsername, userName, userHasVoted) => {
+  const login = (userUsername, userName) => {
     setCurrentUserUsername(userUsername);
     setCurrentUserName(userName);
     localStorage.setItem("userUsername", userUsername);
     localStorage.setItem("userName", userName);
-    localStorage.setItem("userHasVoted", userHasVoted);
+    localStorage.setItem("userHasVoted", false);
   };
 
   const logout = () => {

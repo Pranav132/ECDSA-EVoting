@@ -50,7 +50,7 @@ export const LoginForm = () => {
                     if(responseData.data.status_code === 200){
                         // If login successful
                         const user = responseData.data.user;
-                        authContext.login(user.user_username, user.user_name, user.user_has_voted)
+                        authContext.login(user.user_username, user.user_name)
                     }
                     else{
                         // Invalid Login

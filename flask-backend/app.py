@@ -1,11 +1,11 @@
 from base import db, app, api
 from flask_restful import Resource
-from models import User, Vote
+from models import User, Vote, PublicKey
 from errors import APIValidationError
 from parsers import registerParser, voteParser, loginParser
 import json
 from sqlalchemy import text
-from functions import verify_signature, getUsers
+from functions import verify_signature, getUsers, getAllKeys
 
 class RegisterUser(Resource):
      """
@@ -39,26 +39,37 @@ class RegisterUser(Resource):
         if user_username is None:
             return APIValidationError(status_code=400, error_code = "Client Error", error_message = "User's username must be provided.")
 
-        userCheck = db.session.query(User).filter(User.user_public_key == user_public_key).first()
+        userCheck = db.session.query(User).filter(User.user_username == user_username).first()
 
         if userCheck:
+            return APIValidationError(status_code=409, error_code="Resource Conflict", error_message="Username must be unique.")
+        
+        publicKeyRegistry = getAllKeys()
+        
+        publicKeyCheck = False
+        
+        for key in publicKeyRegistry:
+            if (user_public_key == key):
+                publicKeyCheck = True
+                break
+
+        if publicKeyCheck:
             return APIValidationError(status_code=409, error_code="Resource Conflict", error_message="Public Key must be unique.")
         
-
         userCheck = db.session.query(User).filter(User.user_username == user_username).first()
 
         if userCheck:
             return APIValidationError(status_code=409, error_code="Resource Conflict", error_message="Username must be unique.")
 
         try:
-            newUser = User(user_name=user_name, user_username = user_username, user_public_key=user_public_key)
+            newUser = User(user_name=user_name, user_username = user_username)
+            newKey = PublicKey(public_key=user_public_key)
+            db.session.add(newUser)
+            db.session.add(newKey)
+            db.session.commit()
+            return "User added", 200
         except Exception as e:
             return APIValidationError(status_code=500, error_code="Internal Server Error", error_message=str(e))
-
-        db.session.add(newUser)
-        db.session.commit()
-        
-        return "User added", 200
      
 
 class VoteAPI(Resource):
@@ -91,13 +102,15 @@ class VoteAPI(Resource):
                 3: 0,
                 4: 0,
             }
+            parsedVotes = []
             for vote in allVotes:
                 candidate_id = vote.candidate_id
                 if candidate_id in vote_counts:
                     vote_counts[candidate_id] += 1
                 else:
                     vote_counts[candidate_id] = 1
-            return json.dumps(vote_counts)
+                parsedVotes.append({"Candidate_Voted" : vote.candidate_id, "signature": vote.signature, "public_key": vote.user_public_key})
+            return {"voteCounts": json.dumps(vote_counts), "allVotes": parsedVotes}
         else:
             return APIValidationError(status_code=404, error_code="Resource not Found", error_message="Votes not found")
         
@@ -129,25 +142,21 @@ class VoteAPI(Resource):
             return APIValidationError(status_code=400, error_code = "Client Error", error_message = "Message must be provided.")
         
 
-        users = getUsers()
+        allKeys = getAllKeys()
         userFound = False
-        foundUser = None
-        for user in users:
-            if verify_signature(user['key'], message, user_signature):
+        verifiedKey = ""
+        for key in allKeys:
+            if verify_signature(key, message, user_signature):
                 userFound = True
-                foundUser = user
+                verifiedKey = key
 
         # If User found
         if userFound:
-
-            queriedUser = db.session.query(User).filter(User.user_username == foundUser["username"]).first()
             
-            if queriedUser.user_has_voted:
-                return APIValidationError(status_code=409, error_code="Resource Conflict", error_message="User has already voted")
-            
-            newVote = Vote(candidate_id = candidate_id)
-            queriedUser.user_has_voted = True
+            newVote = Vote(candidate_id = candidate_id, signature = user_signature, user_public_key = verifiedKey)
             db.session.add(newVote)
+            deletedKey = db.session.query(PublicKey).filter(PublicKey.public_key == verifiedKey).first()
+            db.session.delete(deletedKey)
             db.session.commit()
             message = {"response": "Vote added", "status_code": 200}
             return message, 200
@@ -196,13 +205,17 @@ class LoginUser(Resource):
         
         # If User found
         if queriedUser:
-            user_verified = verify_signature(queriedUser.user_public_key, message, user_signature)
+            allKeys = getAllKeys()
+            user_verified = False
+            for key in allKeys:
+                if verify_signature(key, message, user_signature):
+                    user_verified = True
+                    break
+            
             if user_verified:
                 data = {
                     "user_id": queriedUser.user_id,
                     "user_name": queriedUser.user_name,
-                    "user_public_key": queriedUser.user_public_key,
-                    "user_has_voted": queriedUser.user_has_voted,
                     "user_username": queriedUser.user_username
                 }
                 message = {"user": data, "status_code": 200}
